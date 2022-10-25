@@ -34,10 +34,23 @@ func FindZipCodeCEPHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	cep, err := FindZipCodeCep(cepParam)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Hello world"))
+
+	// result, err := json.Marshal(cep)
+	// if err != nil {
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	return
+	// }
+	// w.Write(result)
+
+	json.NewEncoder(w).Encode(cep)
 }
 
 func FindZipCodeCep(zipcode string) (*ViaCEP, error) {
